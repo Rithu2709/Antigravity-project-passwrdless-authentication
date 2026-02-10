@@ -25,9 +25,11 @@ const App = () => {
         const endpoint = view === 'register' ? '/api/register' : '/api/login';
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-            const res = await api.post(endpoint, { name, email, angles });
+            const res = await fetch(`http://localhost:5000${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name,email,angles })
+            });
 
             const data = await res.json();
             console.log('API RESPONSE:', data);
