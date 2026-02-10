@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactorLock from './components/ReactorLock';
+import api from './api/axios'; 
 
 const App = () => {
     // State to manage views: 'register', 'login', 'welcome'
@@ -21,17 +22,12 @@ const App = () => {
     };
 
     // Use current backend connection
-    const handleAuth = async () => {
-        const endpoint = view === 'register' ? '/api/register' : '/api/login';
+     const handleAuth = async () => {
+        const endpoint = view === 'register' ? '/register' : '/login';  // Remove /api prefix
 
         try {
-            const res = await fetch(`http://localhost:5000${endpoint}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name,email,angles })
-            });
-
-            const data = await res.json();
+            const { data } = await api.post(endpoint, { name, email, angles });  // Use axios
+            
             console.log('API RESPONSE:', data);
 
             if (data.success) {
@@ -78,6 +74,7 @@ const App = () => {
             showToast('Server Connection Error', true);
         }
     };
+
 
     const handleLogout = () => {
         setUser(null);
