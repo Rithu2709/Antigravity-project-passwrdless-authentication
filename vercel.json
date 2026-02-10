@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "npm run build --workspace=client",
-  "outputDirectory": "client/dist",
-  "installCommand": "npm install"
+  "installCommand": "cd client && npm ci --legacy-peer-deps",
+  "buildCommand": "cd client && npm run build",
+  "devCommand": "cd client && npm run dev",
+  "outputDirectory": "client/dist"
 }
