@@ -1,0 +1,292 @@
+:root {
+  --bg-dark: #050505;
+  --bg-panel: #111111;
+  --neon-blue: #00f3ff;
+  --neon-red: #ff0055;
+  --neon-green: #00ff9d;
+  --text-main: #e0e0e0;
+  --glass: rgba(255, 255, 255, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Courier New', Courier, monospace;
+  /* Sci-fi terminal look */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin: 0;
+  /* Ensure no default margin */
+}
+
+/* --- Layout --- */
+.app-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.card {
+  background: var(--bg-panel);
+  border: 1px solid #333;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(0, 243, 255, 0.05);
+  text-align: center;
+  position: relative;
+}
+
+.view {
+  display: none;
+  /* React will handle this, but keeping for safety */
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.5s ease;
+}
+
+.view-active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+h1 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px var(--neon-blue);
+  margin-bottom: 0.5rem;
+}
+
+p.subtitle {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+/* --- Form Elements --- */
+input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  color: var(--neon-blue);
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 1rem;
+}
+
+input:focus {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+button {
+  background: transparent;
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+  width: 100%;
+}
+
+button:hover {
+  background: var(--neon-blue);
+  color: #000;
+  box-shadow: 0 0 20px var(--neon-blue);
+}
+
+.link {
+  font-size: 0.8rem;
+  color: #666;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+/* --- THE REACTOR LOCK CSS --- */
+.reactor-container {
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  position: relative;
+  background: radial-gradient(circle, #222 0%, #000 70%);
+  border-radius: 50%;
+  border: 2px solid #333;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  /* Prevent touch scrolling while rotating rings */
+  touch-action: none;
+}
+
+/* Target Marker (Fixed at Top) */
+.target-marker {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 20px;
+  background: var(--neon-red);
+  z-index: 10;
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--neon-red);
+}
+
+.target-label {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--neon-red);
+}
+
+/* Common Ring Styles */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  transition: box-shadow 0.2s;
+}
+
+.ring:active {
+  cursor: grabbing;
+}
+
+/* The Glowing Node on the Ring */
+.ring::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  /* Center of the ring */
+  right: -6px;
+  /* Position at edge (3 o'clock by default) */
+  width: 12px;
+  height: 12px;
+  background: var(--neon-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neon-blue);
+  transform: translateY(-50%);
+}
+
+/* Specific Rings */
+.ring-outer {
+  width: 260px;
+  height: 260px;
+  z-index: 1;
+  border-color: rgba(0, 243, 255, 0.2);
+}
+
+.ring-middle {
+  width: 180px;
+  height: 180px;
+  z-index: 2;
+  border-style: dashed;
+}
+
+.ring-inner {
+  width: 100px;
+  height: 100px;
+  z-index: 3;
+  border-color: rgba(0, 243, 255, 0.5);
+}
+
+/* Center Decoration */
+.core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: #000;
+  border-radius: 50%;
+  border: 2px solid #333;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.core::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #333;
+  border-radius: 50%;
+}
+
+.core.active {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 30px var(--neon-green);
+}
+
+.core.active::before {
+  background: var(--neon-green);
+}
+
+/* --- Toast --- */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  z-index: 100;
+  font-size: 0.8rem;
+}
+
+.toast-show {
+  opacity: 1;
+  top: 30px;
+}
+
+/* --- Profile Display --- */
+.profile-stat {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+}
