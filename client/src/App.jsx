@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ReactorLock from './components/ReactorLock';
-import api from './api/axios'; 
 
 const App = () => {
     // State to manage views: 'register', 'login', 'welcome'
@@ -22,12 +21,15 @@ const App = () => {
     };
 
     // Use current backend connection
-     const handleAuth = async () => {
-        const endpoint = view === 'register' ? '/register' : '/login';  // Remove /api prefix
+    const handleAuth = async () => {
+        const endpoint = view === 'register' ? '/api/register' : '/api/login';
 
         try {
-            const { data } = await api.post(endpoint, { name, email, angles });  // Use axios
-            
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            const res = await api.post(endpoint, { name, email, angles });
+
+            const data = await res.json();
             console.log('API RESPONSE:', data);
 
             if (data.success) {
@@ -74,7 +76,6 @@ const App = () => {
             showToast('Server Connection Error', true);
         }
     };
-
 
     const handleLogout = () => {
         setUser(null);
